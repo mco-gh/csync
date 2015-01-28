@@ -1,4 +1,4 @@
-# csync - push/pull a directory tree or file to/from the cloud.
+# csync - push/pull a directory tree to/from the cloud.
 
 ## Use Cases
 * Quick and painless propagation of state information across machines.

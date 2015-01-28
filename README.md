@@ -1,6 +1,4 @@
-# csync
-
-Simple command to push/pull a directory tree or file to/from the cloud.
+# csync a simple command to push/pull a directory tree or file to/from the cloud.
 
 ## Use Cases
 * Sharing state information across machines.
@@ -31,16 +29,20 @@ or any other tool you desire for creating a GCS or S3 bucket.
     copied to (from) the cloud. 
     
 ## Examples
-Quickly and easily populate your favorite set of shell scripts from the bin directory on your master machine as follows:
-    master$ `cd; cscync push bin`
+Move the current directory tree on your master machine to a new virtual machine:
+
+    master$ csync push dir
+    new-VM$ csync pull dir
     
-    newVM$ `cd; csync pull bin`
+Quickly and easily populate your favorite set of shell scripts from the bin directory on your master machine as follows:
+    master$ cd; csync push bin
+    new-VM$ cd; csync pull bin
     
 Backup the contents of your home directory from your master machine.
-    master$ `cd; csync push`
+    master$ csync push
     
 Restore the contents of your home directory on your master machine:
-    master$ `cd; csync pull`
+    master$ csync pull
 
 ## Supported Storage Services
 * Google Cloud Storage

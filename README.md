@@ -1,4 +1,4 @@
-# csync a simple command to push/pull a directory tree or file to/from the cloud.
+# csync - a simple command to push/pull a directory tree or file to/from the cloud.
 
 ## Use Cases
 * Sharing state information across machines.
@@ -54,6 +54,7 @@ Restore the contents of your home directory on your master machine:
 ## Dependencies
 * The lowest common denominator of shells, /bin/sh.
 * The gsutil command, which is included in the Google Cloud SDK (https://cloud.google.com/sdk/).
+* A cloud storage account with one of the supported providers.
 
 ## Dude, why don't you just use rsync(1)?
 * rsync entails a peering relationship between two machines, which can get complicated if you have multiple

@@ -1,9 +1,9 @@
 # csync - a simple command to push/pull a directory tree or file to/from the cloud.
 
 ## Use Cases
-* Sharing state information across machines.
-* Quickly populating information on new machines (e.g. VMs).
-* Backup/restore to/from the cloud.
+* Quick and painless sharing of state information across machines.
+* Quickly populating information on new machines (e.g. dotfiles, shell scripts, etc. on new VMs).
+* Easy cloud backup and restore.
 
 ## Setup
 Set the environment variable `CSYNC_BUCKET` to the URL for the bucket in which you wish to store your 

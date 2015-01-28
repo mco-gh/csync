@@ -49,3 +49,10 @@ Restore the contents of your home directory on your master machine:
 ## Dependencies
 * The lowest common denominator of shells, /bin/sh.
 * The gsutil command, which is included in the Google Cloud SDK (https://cloud.google.com/sdk/).
+
+## Why don't you just use rsync(1), dude?
+* This approach does not require access to another machine (or a VPN), as rsync often does. It requires 
+  only access to a cloud storage service via the public internet.
+* There's no need to think about a sourcer and a destination. Only a source (for a push) or a destination 
+  (for a pull). By having an implicit "other side" of the connection (the cloud bucket), this tool provides
+  a simpler and more natural interface. 

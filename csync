@@ -46,32 +46,37 @@ shift $((OPTIND-1))
 # Set local dir-or-file to absolute path.
 if [ "$2" != "" ]
 then
-    if [ "$2" = /* ]
+    if [[ $2 = */\./*  ||  $2 = \.  || $2 = */\.\./* || $2 = \.\. ]]
     then
-        dir_or_file=`pwd`/$2
-    else
+        echo "Dot (.) and double dot (..) not allowed in dir-or-file argument."
+    fi
+    if [[ "$2" = /* ]]
+    then
         dir_or_file=$2
+    else
+        dir_or_file=`pwd`/$2
     fi
 else
     dir_or_file=`pwd`
 fi
 
-# If local dir or file is under homedir, make it relative. Otherwise, make it absolute.
-#dir_or_file=
-#case $dir_or_file in
-  #$HOME*) dir_or_file=HOME/$dir_or_file;;
-  #*) dir_or_file=`pwd`/$dir_or_file;;
-#esac
+# If local dir or file is under homedir, make it relative. Otherwise, keep it absolute.
+cloud_path=""
+case $dir_or_file in
+  $HOME*) cloud_path=${CSYNC_BUCKET}/HOME${dir_or_file#$HOME};
+          dir_or_file=${dir_or_file#$HOME/};;
+  *) cloud_path=${CSYNC_BUCKET}$dir_or_file;;
+esac
 
 if [ "$1" = "push" ]
 then
     op="push"
     src=$dir_or_file
-    dest=$CSYNC_BUCKET
+    dest=$cloud_path
     shift
 elif [ "$1" = "pull" ]
 then
-    src=$CSYNC_BUCKET
+    src=$cloud_path
     dest=$dir_or_file
     op="pull"
     shift
@@ -81,6 +86,10 @@ else
     exit 0
 fi
 
-echo "verbose=$verbose, op=$op, src=$src, dest=$dest"
+cmd="gsutil -m rsync $src $dest"
+if [ "$verbose" = "1" ]
+then
+    echo $cmd
+fi
 
-# End of file
+$cmd

@@ -42,16 +42,16 @@ Move the current directory tree on your master machine to a new virtual machine:
     
 Quickly and easily populate your favorite set of shell scripts from the bin directory on your master machine as follows:
 
-    `master$ cd; csync push bin`
-    `new-VM$ cd; csync pull bin`
+    master$ cd; csync push bin
+    new-VM$ cd; csync pull bin
     
 Backup the contents of your home directory from your master machine.
 
-    `master$ csync push`
+    master$ csync push
     
 Restore the contents of your home directory on your master machine:
 
-    `master$ csync pull`
+    master$ csync pull
 
 ## Supported Storage Services
 * Google Cloud Storage

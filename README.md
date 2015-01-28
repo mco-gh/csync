@@ -16,12 +16,13 @@ or any other tool you desire for creating a GCS or S3 bucket.
 
 ## Syntax
 
-    csync -d -h -v [push|pull] [dir-or-file]
+    csync -c -d -h -v [push|pull] [dir-or-file]
     
+    -c - base file diffs on checksums (this is slower becaause it calculates checksums on
+         every local file). The default is to simply compare file sizes but that obviously
+         misses file changes which don't alter the file size.
     -d - Delete any files in the target tree that don't also exist in the source tree.
     -h - display this help text
-    -S - base file differences on content size only (this is faster because it avoids calculating 
-         checksums for every file but it also misses files with the same size but mutated content).
     -v - product verbose output detailing every file transferred
     
     dir-or-file - Optional aergument specifying the source for a push operation and the destination

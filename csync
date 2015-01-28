@@ -10,6 +10,7 @@ dir_or_file=""
 src=""
 dest=""
 verbose=0
+delete=
 
 # Make sure we know the user's home directory.
 if [ "$HOME" = "" ]
@@ -28,13 +29,15 @@ then
 fi
 
 # Parse options.
-while getopts "h?vf:" opt; do
+while getopts "dh?v" opt; do
     case "$opt" in
     h|\?)
         echo -e $HELP
         exit 0
         ;;
     v)  verbose=1
+        ;;
+    d)  delete=-d
         ;;
     esac
 done
@@ -43,41 +46,47 @@ done
 shift $((OPTIND-1))
 [ "$1" = "--" ] && shift
 
-# Set local dir-or-file to absolute path.
+# Set local dir-or-file and expanded dir-or-file (absolute path to dir-or-file).
 if [ "$2" != "" ]
 then
     if [[ $2 = */\./*  ||  $2 = \.  || $2 = */\.\./* || $2 = \.\. ]]
     then
         echo "Dot (.) and double dot (..) not allowed in dir-or-file argument."
+        exit 0
     fi
+    dir_or_file=$2
     if [[ "$2" = /* ]]
     then
-        dir_or_file=$2
+        expanded_dir_or_file=$2
     else
-        dir_or_file=`pwd`/$2
+        expanded_dir_or_file=`pwd`/$2
     fi
 else
-    dir_or_file=`pwd`
+    dir_or_file="."
+    expanded_dir_or_file=`pwd`
 fi
 
 # If local dir or file is under homedir, make it relative. Otherwise, keep it absolute.
 cloud_path=""
-case $dir_or_file in
-  $HOME*) cloud_path=${CSYNC_BUCKET}/HOME${dir_or_file#$HOME};
-          dir_or_file=${dir_or_file#$HOME/};;
-  *) cloud_path=${CSYNC_BUCKET}$dir_or_file;;
+case $expanded_dir_or_file in
+  $HOME*) cloud_path=${CSYNC_BUCKET}/HOME${expanded_dir_or_file#$HOME};
+          local_path=$dir_or_file
+          ;;
+  *) cloud_path=${CSYNC_BUCKET}$dir_or_file
+     local_path=$dir_or_file
+     ;;
 esac
 
 if [ "$1" = "push" ]
 then
     op="push"
-    src=$dir_or_file
+    src=$local_path
     dest=$cloud_path
     shift
 elif [ "$1" = "pull" ]
 then
     src=$cloud_path
-    dest=$dir_or_file
+    dest=$local_path
     op="pull"
     shift
 else
@@ -86,10 +95,10 @@ else
     exit 0
 fi
 
-cmd="gsutil -m rsync $src $dest"
+cmd="gsutil -m rsync -r $delete $src $dest"
 if [ "$verbose" = "1" ]
 then
     echo $cmd
 fi
 
-$cmd
+#$cmd

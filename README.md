@@ -1,11 +1,9 @@
-# csync
-
-Simple command to push/pull a directory tree or file to/from the cloud.
+# csync - a simple command to push/pull a directory tree or file to/from the cloud.
 
 ## Use Cases
-* Sharing state information across machines.
-* Quickly populating information on new machines (e.g. VMs).
-* Backup/restore to/from the cloud.
+* Quick and painless propagation of state information across machines.
+* Quick and easy populating of new machines (e.g. dotfiles, shell scripts, etc. on new VMs).
+* Trivially easy cloud backup and restore.
 
 ## Setup
 Set the environment variable `CSYNC_BUCKET` to the URL for the bucket in which you wish to store your 
@@ -18,29 +16,42 @@ or any other tool you desire for creating a GCS or S3 bucket.
 
 ## Syntax
 
-    csync -d -h -v [push|pull] [dir-or-file]
+    csync -c -d -h -v [push|pull] [dir-or-file]
     
+    -c - base file diffs on checksums (this is slower becaause it calculates checksums on
+         every local file). The default is to simply compare file sizes but that obviously
+         misses file changes which don't alter the file size.
     -d - Delete any files in the target tree that don't also exist in the source tree.
     -h - display this help text
     -v - product verbose output detailing every file transferred
     
-    `dir-or-file` - Optional aergument specifying the source for a push operation and the destination
+    dir-or-file - Optional aergument specifying the source for a push operation and the destination
                   for a pull operation. If unspecified, this is assumed to be the current directory.
                   
-    For a push (pull) operation, The explicitly or implcitly specified directory or file is recursively 
-    copied to (from) the cloud. 
+    If the explicitly or implcitly specified path is a directory, the entire directory tree is
+    recursively synched with the cloud representation.
+    
+    Note that cscync compares the local object(s) with the cloud representation(s) and transfers
+    data only when the two analogs differ in size (or in content, if the -c option is supplied).
     
 ## Examples
-Quickly and easily populate your favorite set of shell scripts from the bin directory on your master machine as follows:
-    master$ `cd; cscync push bin`
+Move the current directory tree on your master machine to a new virtual machine:
+
+    master$ csync push dir
+    new-VM$ csync pull dir
     
-    newVM$ `cd; csync pull bin`
+Quickly and easily populate your favorite set of shell scripts from the bin directory on your master machine as follows:
+
+    `master$ cd; csync push bin`
+    `new-VM$ cd; csync pull bin`
     
 Backup the contents of your home directory from your master machine.
-    master$ `cd; csync push`
+
+    `master$ csync push`
     
 Restore the contents of your home directory on your master machine:
-    master$ `cd; csync pull`
+
+    `master$ csync pull`
 
 ## Supported Storage Services
 * Google Cloud Storage
@@ -49,10 +60,12 @@ Restore the contents of your home directory on your master machine:
 ## Dependencies
 * The lowest common denominator of shells, /bin/sh.
 * The gsutil command, which is included in the Google Cloud SDK (https://cloud.google.com/sdk/).
+* A cloud storage account with one of the supported providers.
 
-## Why don't you just use rsync(1), dude?
-* This approach does not require access to another machine (or a VPN), as rsync often does. It requires 
-  only access to a cloud storage service via the public internet.
-* There's no need to think about a sourcer and a destination. Only a source (for a push) or a destination 
-  (for a pull). By having an implicit "other side" of the connection (the cloud bucket), this tool provides
-  a simpler and more natural interface. 
+## Dude, why don't you just use rsync(1)?
+* rsync entails a peering relationship between two machines, which can get complicated if you have multiple
+  machines you want to keep in synch or if you have limited access to the master (e.g. if it's behind a VPN).
+  Csdync requires only access to a cloud storage service via HTTP and the public internet.
+* There's no need to think about a source and a destination, only a source (for a push) or a destination 
+  (for a pull). By having an implicit "other side" of the connection (your cloud bucket), I find that csync
+  provides a simpler and more natural interface. 

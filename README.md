@@ -65,7 +65,7 @@ Restore the contents of your home directory on your master machine:
 ## Dude, why don't you just use rsync(1)?
 * rsync entails a peering relationship between two machines, which can get complicated if you have multiple
   machines you want to keep in synch or if you have limited access to the master (e.g. if it's behind a VPN).
-  Csdync requires only access to a cloud storage service via HTTP and the public internet.
+  csync requires only access to a cloud storage service via HTTP and the public internet.
 * There's no need to think about a source and a destination, only a source (for a push) or a destination 
   (for a pull). By having an implicit "other side" of the connection (your cloud bucket), I find that csync
   provides a simpler and more natural interface. 

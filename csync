@@ -132,4 +132,4 @@ then
     echo $cmd
 fi
 
-#$cmd
+$cmd

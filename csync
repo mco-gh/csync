@@ -1,10 +1,89 @@
 #!/bin/sh
 
+# Help data.
+
+HELP="\n
+    csync - a simple command to push/pull a directory tree or file to/from the cloud.\n
+    \n
+    Use Cases\n
+    \n
+    - Quick and painless propagation of state information across machines.\n
+    - Quick and easy populating of new machines (e.g. dotfiles, shell scripts, etc. on new VMs).\n
+    - Trivially easy cloud backup and restore.\n
+    \n
+    Setup\n
+    \n
+    Set the environment variable CSYNC_BUCKET to the URL for the bucket in which you wish to store your data in the cloud.\n
+    This URL should take the form service-provider://bucket-name, for example:\n
+    \n
+    - gs://my-sync-bucket\n
+    - s3://my-sync-bucket\n
+    \n
+    Before you start using csync, you'll need to create this bucket. This can be done via the gsutil mb\n
+    command or any other tool you desire for creating a GCS or S3 bucket.\n
+    \n
+    Syntax\n
+    \n
+    csync -c -d -h -v [push|pull] [dir-or-file]\n
+    \n
+    -c - base file diffs on checksums (this is slower becaause it calculates checksums on\n
+         every local file). The default is to simply compare file sizes but that obviously\n
+         misses file changes which don't alter the file size.\n
+    -d - Delete any files in the target tree that don't also exist in the source tree.\n
+    -h - display this help text\n
+    -v - product verbose output detailing every file transferred\n
+    \n
+    dir-or-file - Optional aergument specifying the source for a push operation and the destination\n
+                  for a pull operation. If unspecified, this is assumed to be the current directory.\n
+    \n
+    If the explicitly or implcitly specified path is a directory, the entire directory tree is\n
+    recursively synched with the cloud representation.\n
+    \n
+    Note that cscync compares the local object(s) with the cloud representation(s) and transfers\n
+    data only when the two analogs differ in size (or in content, if the -c option is supplied).\n
+    \n
+    Examples\n
+    \n
+    - Move the current directory tree on your master machine to a new virtual machine:\n
+    \n
+    \tmaster$ csync push dir\n
+    \tnew-VM$ csync pull dir\n
+    \n
+    - Quickly and easily populate your favorite set of shell scripts from the bin directory on your master machine as follows:\n
+    \n
+    \tmaster$ cd; csync push bin\n
+    \tnew-VM$ cd; csync pull bin\n
+    \n
+    - Backup the contents of your home directory from your master machine.\n
+    \n
+    \tmaster$ csync push\n
+    \n
+    - Restore the contents of your home directory on your master machine:\n
+    \n
+    \tmaster$ csync pull\n
+    \n
+    Supported Storage Services\n
+    \n
+    - Google Cloud Storage\n
+    - Amazon S3\n
+    \n
+    Dependencies\n
+    \n
+    - The lowest common denominator of shells, /bin/sh.\n
+    - The gsutil command, which is included in the Google Cloud SDK (https://cloud.google.com/sdk/).\n
+    - A cloud storage account with one of the supported providers.\n
+    \n
+    Dude, why don't you just use rsync(1)?\n
+    \n
+    - rsync entails a peering relationship between two machines, which can get complicated if you have multiple machines you want to \n
+    keep in synch or if you have limited access to the master (e.g. if it's behind a VPN). Csdync requires only access to a cloud \n
+    storage service via HTTP and the public internet.\n
+    - There's no need to think about a source and a destination, only a source (for a push) or a destination (for a pull). By having \n
+    an implicit other side of the connection (your cloud bucket), I find that csync provides a simpler and more natural interface.
+"
+
 # Define/initialize environment variables. 
 OPTIND=1         # Reset in case getopts has been used previously in the shell.
-HELP="
-help data goes here
-"
 op=""
 dir_or_file=""
 src=""

@@ -20,13 +20,18 @@ or any other tool you desire for creating a GCS or S3 bucket.
     
     -d - Delete any files in the target tree that don't also exist in the source tree.
     -h - display this help text
+    -S - base file differences on content size only (this is faster because it avoids calculating 
+         checksums for every file but it also misses files with the same size but mutated content).
     -v - product verbose output detailing every file transferred
     
-    `dir-or-file` - Optional aergument specifying the source for a push operation and the destination
+    dir-or-file - Optional aergument specifying the source for a push operation and the destination
                   for a pull operation. If unspecified, this is assumed to be the current directory.
                   
-    For a push (pull) operation, The explicitly or implcitly specified directory or file is recursively 
-    copied to (from) the cloud. 
+    If the explicitly or implcitly specified path is a directory, the entire directory tree is
+    recursively synched with the cloud representation.
+    
+    Note that cscync compares the local object(s) with the cloud representation(s) and transfers
+    data only when the two analogs differ in size (or in content, if the -c option is supplied).
     
 ## Examples
 Move the current directory tree on your master machine to a new virtual machine:

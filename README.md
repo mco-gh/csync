@@ -35,14 +35,17 @@ Move the current directory tree on your master machine to a new virtual machine:
     new-VM$ csync pull dir
     
 Quickly and easily populate your favorite set of shell scripts from the bin directory on your master machine as follows:
-    master$ cd; csync push bin
-    new-VM$ cd; csync pull bin
+
+    `master$ cd; csync push bin`
+    `new-VM$ cd; csync pull bin`
     
 Backup the contents of your home directory from your master machine.
-    master$ csync push
+
+    `master$ csync push`
     
 Restore the contents of your home directory on your master machine:
-    master$ csync pull
+
+    `master$ csync pull`
 
 ## Supported Storage Services
 * Google Cloud Storage
@@ -52,9 +55,10 @@ Restore the contents of your home directory on your master machine:
 * The lowest common denominator of shells, /bin/sh.
 * The gsutil command, which is included in the Google Cloud SDK (https://cloud.google.com/sdk/).
 
-## Why don't you just use rsync(1), dude?
-* This approach does not require access to another machine (or a VPN), as rsync often does. It requires 
-  only access to a cloud storage service via the public internet.
-* There's no need to think about a sourcer and a destination. Only a source (for a push) or a destination 
-  (for a pull). By having an implicit "other side" of the connection (the cloud bucket), this tool provides
-  a simpler and more natural interface. 
+## Dude, why don't you just use rsync(1)?
+* rsync entails a peering relationship between two machines, which can get complicated if you have multiple
+  machines you want to keep in synch or if you have limited access to the master (e.g. if it's behind a VPN).
+  Csdync requires only access to a cloud storage service via HTTP and the public internet.
+* There's no need to think about a source and a destination, only a source (for a push) or a destination 
+  (for a pull). By having an implicit "other side" of the connection (your cloud bucket), I find that csync
+  provides a simpler and more natural interface. 

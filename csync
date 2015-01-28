@@ -58,7 +58,7 @@ then
 fi
 
 # Parse options.
-while getopts "dhs?v" opt; do
+while getopts "cdh?v" opt; do
     case "$opt" in
     h|\?)
         echo -e $HELP

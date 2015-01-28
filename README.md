@@ -1,6 +1,6 @@
 # csync
 
-Simple command to push/pull a directory to tree to/from the cloud.
+Simple command to push/pull a directory tree or file to/from the cloud.
 
 ## Use Cases
 * Sharing state information across machines.
@@ -8,12 +8,12 @@ Simple command to push/pull a directory to tree to/from the cloud.
 * Backup/restore to/from the cloud.
 
 ## Setup
-Set the environment variable CSYNC_BUCKET to the url for the bucket in which you wish to store your 
-data in the cloud. This URL should take the form service-provider://bucket-name, for example:
-* gs://my-sync-bucket
-* s3://my-sync-bucket
+Set the environment variable `CSYNC_BUCKET` to the URL for the bucket in which you wish to store your 
+data in the cloud. This URL should take the form `service-provider://bucket-name`, for example:
+* `gs://my-sync-bucket`
+* `s3://my-sync-bucket`
 
-Before you start using csync, you'll need to create this bucket. This can be done via the "gsutil mb" command
+Before you start using csync, you'll need to create this bucket. This can be done via the `gsutil mb` command
 or any other tool you desire for creating a GCS or S3 bucket.
 
 ## Syntax
@@ -24,7 +24,7 @@ or any other tool you desire for creating a GCS or S3 bucket.
     -h - display this help text
     -v - product verbose output detailing every file transferred
     
-    dir-or-file - Optional aergument specifying the source for a push operation and the destination
+    `dir-or-file` - Optional aergument specifying the source for a push operation and the destination
                   for a pull operation. If unspecified, this is assumed to be the current directory.
                   
     For a push (pull) operation, The explicitly or implcitly specified directory or file is recursively 
@@ -32,15 +32,15 @@ or any other tool you desire for creating a GCS or S3 bucket.
     
 ## Examples
 Quickly and easily populate your favorite set of shell scripts from the bin directory on your master machine as follows:
-    master$ cd; cscync push bin
+    master$ `cd; cscync push bin`
     
-    newVM$ cd; csync pull bin
+    newVM$ `cd; csync pull bin`
     
 Backup the contents of your home directory from your master machine.
-    master$ cd; csync push
+    master$ `cd; csync push`
     
 Restore the contents of your home directory on your master machine:
-    master$ cd; csync pull
+    master$ `cd; csync pull`
 
 ## Supported Storage Services
 * Google Cloud Storage

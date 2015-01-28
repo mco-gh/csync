@@ -10,6 +10,7 @@ dir_or_file=""
 src=""
 dest=""
 verbose=0
+checksums=
 delete=
 
 # Make sure we know the user's home directory.
@@ -29,13 +30,15 @@ then
 fi
 
 # Parse options.
-while getopts "dh?v" opt; do
+while getopts "dhs?v" opt; do
     case "$opt" in
     h|\?)
         echo -e $HELP
         exit 0
         ;;
     v)  verbose=1
+        ;;
+    c)  checksums=-c
         ;;
     d)  delete=-d
         ;;
@@ -95,7 +98,7 @@ else
     exit 0
 fi
 
-cmd="gsutil -m rsync -r $delete $src $dest"
+cmd="gsutil -m rsync -r $checksum $delete $src $dest"
 if [ "$verbose" = "1" ]
 then
     echo $cmd

@@ -16,7 +16,7 @@ or any other tool you desire for creating a GCS or S3 bucket.
 
 ## Syntax
 
-    csync -c -d -h -v [push|pull] [dir-or-file]
+    csync -c -d -h -v push|pull [dir-or-file]
     
     -c - base file diffs on checksums (this is slower becaause it calculates checksums on
          every local file). The default is to simply compare file sizes but that obviously
@@ -25,7 +25,8 @@ or any other tool you desire for creating a GCS or S3 bucket.
     -h - display this help text
     -v - product verbose output detailing every file transferred
     
-    dir-or-file - Optional aergument specifying the source for a push operation and the destination
+    push|pull - sync direction, push means sync from local to cloud, pull means sync from cloud to local
+    dir-or-file - Optional argument specifying the source for a push operation and the destination
                   for a pull operation. If unspecified, this is assumed to be the current directory.
                   
     If the explicitly or implcitly specified path is a directory, the entire directory tree is

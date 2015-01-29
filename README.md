@@ -36,7 +36,7 @@ or any other tool you desire for creating a GCS or S3 bucket.
     data only when the two analogs differ in size (or in content, if the -c option is supplied).
     
 ## Examples
-Move the current directory tree on your master machine to a new virtual machine:
+Copy a current directory tree on your master machine to a new virtual machine:
 
     master$ csync push dir
     new-VM$ csync pull dir

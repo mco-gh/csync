@@ -1,9 +1,9 @@
 # csync - sync a directory tree to/from the cloud
 
 ## Use Cases
-* Quick and painless propagation of state information across machines.
-* Quick and easy populating of new machines (e.g. dotfiles, shell scripts, etc. on new VMs).
-* Trivially easy cloud backup and restore.
+* Propagation of state information across machines.
+* Population of new machines (e.g. dotfiles, shell scripts, etc. on new VMs).
+* Cloud backup and restore.
 
 ## Setup
 Set the environment variable `CSYNC_BUCKET` to the URL for the bucket in which you wish to store your 
@@ -16,9 +16,9 @@ or any other tool you desire for creating a GCS or S3 bucket.
 
 ## Syntax
 
-    csync -c -d -h -v push|pull [dir-or-file]
+    csync [-c] [-d] [-h] [-v] push|pull [dir-or-file]
     
-    -c - base file diffs on checksums (this is slower becaause it calculates checksums on
+    -c - base file diffs on checksums (this is slower because it calculates checksums on
          every local file). The default is to simply compare file sizes but that obviously
          misses file changes which don't alter the file size.
     -d - Delete any files in the target tree that don't also exist in the source tree.

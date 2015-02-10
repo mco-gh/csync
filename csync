@@ -80,12 +80,14 @@ shift $((OPTIND-1))
 # Set local dir-or-file and expanded dir-or-file (absolute path to dir-or-file).
 if [ "$2" != "" ]
 then
+    # Avoid the mess of dealing with . and ..
     if [[ $2 = */\./*  ||  $2 = \.  || $2 = */\.\./* || $2 = \.\. ]]
     then
         echo "Dot (.) and double dot (..) not allowed in dir-or-file argument."
         exit 0
     fi
     dir_or_file=$2
+    # Expand to full path name (if not already so).
     if [[ "$2" = /* ]]
     then
         expanded_dir_or_file=$2
@@ -99,13 +101,16 @@ fi
 
 # If local dir or file is under homedir, make it relative. Otherwise, keep it absolute.
 cloud_path=""
+local_path=$dir_or_file
 case $expanded_dir_or_file in
-  $HOME*) cloud_path=${CSYNC_BUCKET}/HOME${expanded_dir_or_file#$HOME};
-          local_path=$dir_or_file
-          ;;
-  *) cloud_path=${CSYNC_BUCKET}$dir_or_file
-     local_path=$dir_or_file
-     ;;
+  $HOME*) 
+      # Path is under home dir.
+      cloud_path=${CSYNC_BUCKET}/HOME${expanded_dir_or_file#$HOME};
+      ;;
+  *) 
+      # Path is not under home dir.
+      cloud_path=${CSYNC_BUCKET}${expanded_dir_or_file}
+      ;;
 esac
 
 if [ "$1" = "push" ]
